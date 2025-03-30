@@ -9,11 +9,24 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.post('/api/signup', async (req, res) => {
-    const {name, lastName, email, password} = req.body;
-
-    const user = await createUser(name, lastName, email, password);
-    res.send(user)
-})
+    const { name, lastName, email, password } = req.body;
+  
+    try {
+      const { user, token } = await createUser(name, lastName, email, password);
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: false,
+        maxAge: 3600000,
+      });
+      res.json({
+        user,
+        token,
+      });
+    } catch (error) {
+      console.error("Signup error:", error);
+      res.status(500).json({ message: 'Error creating user' });
+    }
+  });
 
 app.post('/api/login', async (req, res) => {
     const {email, password} = req.body;

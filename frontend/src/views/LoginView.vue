@@ -33,6 +33,7 @@
 <script setup>
 import { ref } from "vue";
 import { useAuthStore } from '@/stores/AuthStore';
+import { useRouter } from "vue-router";
 
 const auth = useAuthStore();
 const email = ref("");
@@ -40,11 +41,12 @@ const password = ref("");
 const emailError = ref("");
 const passwordError = ref("");
 const loginSuccess = ref();
+const router = useRouter();
 
-const validateForm = () => {
+const validateForm = async () => {
   emailError.value = "";
   passwordError.value = "";
-  loginSuccess.value = false;
+  loginSuccess.value = "";
 
   const domainPattern = /.+\.[a-zA-Z]{2,}$/;
   if (!domainPattern.test(email.value)) {
@@ -56,13 +58,17 @@ const validateForm = () => {
   }
 
   if (!emailError.value && !passwordError.value) {
-    auth.login(email.value, password.value)
-      .then((loginResult) => {
-        loginSuccess.value = loginResult ? true : false;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    try {
+      const loginResult = await auth.login(email.value, password.value); 
+      loginSuccess.value = loginResult;
+
+      if (loginResult) {
+        router.push({ name: "notes" }); 
+      }
+
+    } catch (error) {
+      console.error(error); 
+    }
   }
 };
 </script>

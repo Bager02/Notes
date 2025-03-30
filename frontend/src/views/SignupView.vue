@@ -46,9 +46,9 @@
 
 <script setup>
 import { ref } from "vue";
-import { useAuthStore } from "@/stores/AuthStore"; // Import the AuthStore
+import { useAuthStore } from "@/stores/AuthStore"; 
+import { useRouter } from "vue-router";
 
-// Define the form inputs and error messages
 const firstName = ref("");
 const lastName = ref("");
 const email = ref("");
@@ -62,11 +62,10 @@ const passwordError = ref("");
 const confirmPasswordError = ref("");
 const signupSuccess = ref(false);
 
-// Create an instance of the AuthStore
 const authStore = useAuthStore();
+const router = useRouter();
 
 const validateForm = async () => {
-  // Reset errors and success message
   firstNameError.value = "";
   lastNameError.value = "";
   emailError.value = "";
@@ -74,7 +73,6 @@ const validateForm = async () => {
   confirmPasswordError.value = "";
   signupSuccess.value = false;
 
-  // Form validation
   if (!firstName.value.trim()) {
     firstNameError.value = "First Name is required";
   }
@@ -96,7 +94,6 @@ const validateForm = async () => {
     confirmPasswordError.value = "Passwords do not match";
   }
 
-  // If no validation errors, attempt to sign up
   if (
     !firstNameError.value &&
     !lastNameError.value &&
@@ -105,11 +102,15 @@ const validateForm = async () => {
     !confirmPasswordError.value
   ) {
     try {
-      // Call the signup action from the AuthStore
       const userData = await authStore.signup(firstName.value, lastName.value, email.value, password.value);
-      signupSuccess.value = true; // Display success message
+      signupSuccess.value = true; 
+      
+      if (userData) {
+        router.push({ name: "notes" }); 
+      }
+
     } catch (error) {
-      console.error("Signup failed:", error); // Handle signup error
+      console.error("Signup failed:", error); 
     }
   }
 };

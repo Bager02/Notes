@@ -21,7 +21,9 @@ export async function createUser(name: string, lastName: string, email: string, 
         },
     });
 
-    return user;
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET as string, { expiresIn: '1h' });
+
+    return { user, token };
 }
 
 export async function loginUser(email: string, password: string) {
