@@ -12,6 +12,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@tailwindcss/line-clamp": "^0.4.4",
     "axios": "^1.8.4",
     "h3": "^1.15.1",
     "http-proxy": "^1.18.1",

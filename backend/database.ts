@@ -57,6 +57,7 @@ export async function createNote(id: number, title: string, body: string) {
                 title,
                 body,
                 authorId: id,
+                createdAt: new Date(),
             },
         });
         return note;
