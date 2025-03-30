@@ -13,7 +13,7 @@
     <br>
     <div class="contact-info">
       <h2>Contact Information</h2>
-      <p>Email: ****</p>
+      <p>Email: bla bla</p>
       <p>Phone: ****</p>
     </div>
   </div>
